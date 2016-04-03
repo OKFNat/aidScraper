@@ -32,6 +32,10 @@ cd code
 python aid-scraper.py
 ```
 
+**Original sourcecode**
+
+Thanks to Christian Goebel for the [original sourcecode](https://github.com/ChristianGoebel/Scrape_ADC) we used for the final version.
+
 ## DATA INPUT
 The original data is from the project list of the austrian development agency (ADA) [published on their website](http://www.entwicklung.at/nc/zahlen-daten-und-fakten/projektliste/?tx_sysfirecdlist_pi1[test]=test&tx_sysfirecdlist_pi1[mode]=1&tx_sysfirecdlist_pi1[sort]=uid%3A1&tx_sysfirecdlist_pi1[pointer]=). The data consists of all contracts approved since January 1st of 2010 in chronological order. The date of the last update can be found on the first table page as "Datum der letzten Aktualisierung".
 
@@ -113,11 +117,17 @@ row: one project each row.
 - analyze and visualize the data: networkX, maps, Gephi
 - add country namecodes for easier combinating with other data
 
-## CHANGELOG
-### Version 0.2 - 2015-10-29
-**init repo**
+## ACTUAL VERSION
+[CHANGELOG.md](CHANGELOG.md)
 
-
+### Version 0.2 - [2015-10-29](https://github.com/OKFNat/aidScraper/commit/bfd7517f650090ce6d460f10c23a3f5d4fa4207a)
+**extended scraper**
+- complete re-structuring of functionality
+- add csv export
+- add json export
+- add README.md
+- add documentation and comments
+- add LICENSE file
 
 
 

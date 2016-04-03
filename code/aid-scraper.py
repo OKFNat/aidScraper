@@ -15,7 +15,7 @@ import os
 import string
 import time
 
-__author__ = "Christian Goedel, Stefan Kasberger"
+__author__ = "Christian Goebel, Stefan Kasberger"
 __copyright__ = "Copyright 2015"
 __license__ = "MIT"
 __version__ = "0.2"
@@ -274,7 +274,7 @@ def Save2CSV(data, filename):
     Returns:
         none
     """
-    csvString = '"contract-number";"contract-title";"OEZA-ADA-contract-volume";"contract-partner";"country-region";"description";"url"\n'
+    csvString = '"contract-number";"contract-title";"OEZA-ADA-contract-volume";"contract-partner";"country-region";"description";"url;"\n'
     # iterate over each project
     for project in data:
 		number = '""'
@@ -286,20 +286,21 @@ def Save2CSV(data, filename):
 		url = '""'
 		# read out each attribute
 		for elem in project.keys():
+			val = project[elem].replace('"', '')
 			if elem == 'contract-number':
-				number = '"'+project[elem]+'"'
+				number = '"'+val+'"'
 			if elem == 'contract-title':
-				title = '"'+project[elem]+'"'
+				title = '"'+val+'"'
 			if elem == 'OEZA-ADA-contract-volume':
-				funding = '"'+project[elem]+'"'
+				funding = '"'+val+'"'
 			if elem == 'contract-partner':
-				partner = '"'+project[elem]+'"'
+				partner = '"'+val+'"'
 			if elem == 'country-region':
-				region = '"'+project[elem]+'"'
+				region = '"'+val+'"'
 			if elem == 'description':
-				description = '"'+project[elem]+'"'
+				description = '"'+val+'"'
 			if elem == 'url':
-				url = '"'+project[elem]+'"'
+				url = '"'+val+'";'
 			
 		csvString += number+';'+title+';'+funding+';'+partner+';'+region+';'+description+';'+url+'\n'
 
