@@ -1,8 +1,6 @@
 Austrian aid scraper
 ==============================
-The scraper extracts information from the EU arms export reports between 2005 and 2013, which is very hard to read for machines. The automatically extracted information is then stored in different data structures (network, country specific) and file formats (CSV, JSON), which are relevant for the next steps, like network analysis, visualization and statistical analysis.
-
-Scrapes data for all development cooperation projects on Austrian Development Cooperation website
+The scraper extracts information from the austrian development projects since 2010 from the austrian development agency website. The automatically extracted informations are stored in CSV and JSON files to make the further usage as easy as possible.
 
 - Team: Gute Taten für gute Daten Project (Open Knowledge Austria)
 - Status: Production
@@ -36,11 +34,35 @@ python aid-scraper.py
 
 Thanks to Christian Goebel for the [original sourcecode](https://github.com/ChristianGoebel/Scrape_ADC) we used for the final version.
 
+### How the scraper works
+**Download the raw html data**
+
+Here all the html raw data gets downloaded, stored locally and the basic data gets parsed.
+- Download all overview pages with the tables (html). The navigation for the fetching runs through all overview pages by asking the existance of the "weiter" anchor and counting up an url variable.
+- Open the downloaded files.
+- Parse out the basic information about each project from the overview tables. This is necessary here, because the download of the project page needs the link from the overview table.
+- Store the parsed data as JSON file.
+- Download all project pages (html).
+
+**Parse the html**
+
+Here the description of the project gets added to the data.
+- Open the JSON data.
+- Open the project-pages files (html).
+- Parse out the additional description information from the project pages.
+- Store updated data as JSON file.
+
+**Export as CSV**
+
+Here the data gets exported as a CSV file.
+- Open the data (JSON).
+- Save the serialized data as CSV file.
+
 ## DATA INPUT
-The original data is from the project list of the austrian development agency (ADA) [published on their website](http://www.entwicklung.at/nc/zahlen-daten-und-fakten/projektliste/?tx_sysfirecdlist_pi1[test]=test&tx_sysfirecdlist_pi1[mode]=1&tx_sysfirecdlist_pi1[sort]=uid%3A1&tx_sysfirecdlist_pi1[pointer]=). The data consists of all contracts approved since January 1st of 2010 in chronological order. The date of the last update can be found on the first table page as "Datum der letzten Aktualisierung".
+The original data is from the project list of the austrian development agency (ADA) [published on their website](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/). The data consists of all contracts approved since January 1st of 2010.  in the list in chronologically descending order. The date of the last update can be found on the first table page as "Datum der letzten Aktualisierung".
 
 ### The Tables
-The tables are the basic data, where most of the data is parsed out. The data is published in the following structure (e. g. first project in the list).
+The tables are the basic data, where most of the data is parsed out. The data is published in the following structure (e. g. first project).
 
 
 | Vertragsnummer | Vertragstitel | Land/Region | OEZA/ADA-Vertragssumme | Vertragspartner |
@@ -54,12 +76,18 @@ The tables are the basic data, where most of the data is parsed out. The data is
 - OEZA/ADA-Vertragssumme: amount of money granted by contract.
 - Vertragspartner: partner(s) in the project.
 
-
 ### The project pages
 When you click on the contract titel in a table you get to the project page. It consists of the same data as the table view, except the additional description text (named "Beschreibung").
 
 ### Soundness
-- So far, we can not say anything about the data quality (completeness, accurateness, etc.), but there are also so far no reaseons to doubt the quality.
+So far, we can not say anything about the data quality (completeness, accurateness, etc.), but there are also so far no reaseons to doubt the quality.
+
+**Data errors found**
+- [Land/Region missing](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/?tx_sysfirecdlist_pi1[showUid]=486&cHash=bcfc60e39b1543897f5492737913c8f0) 
+- [Land/Region and Vertragsnummer missing](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/?tx_sysfirecdlist_pi1%5BshowUid%5D=1249&cHash=0b453e3503d1f7f1e2e852ea2dece833)
+- [Vertragsnummer missing](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/?tx_sysfirecdlist_pi1%5BshowUid%5D=942&cHash=9493e43644fc91b324711888c3ea54c2)
+- [Vertragssumme is in Partner field, Partner is missing](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/?tx_sysfirecdlist_pi1[showUid]=1092&cHash=865e0122108c1411da8cc5c588441d73)
+- [Vertragssumme is missing](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/?tx_sysfirecdlist_pi1%5BshowUid%5D=646&cHash=fb5bb6e76b698da959f8894b5a417ce9)
 
 ## DATA OUTPUT
 
@@ -101,33 +129,32 @@ row: one project each row.
 
 ## STRUCTURE
 - [README.md](README.md): Overview of repository
+- [code/aid-scraper.py](code/aid-scraper.py): scraper script in python
 - [CHANGELOG.md](README.md): Overview of repository
+- [LICENSE](README.md): MIT license text
 
 ## TODO
 **important**
 - verify the data
 - research: is there a difference between approved funding and paid one?
+- convert code to Python3: pay attention to encoding issues in i/o operations
 
 **optional**
 - create dataset for network analyses: json, csv for gephi and networkX
-- update code to Python3
 - compare data from tables with data from project pages.
+- solve the encoding and CR issues. When saving the html table cells to the dict, it is done as unicode, so i did not work out how to replace the '\n' and '\r' characters. Did it then before storing to the CSV file, which is a quick and dirty solution. 
 
 **new features**
 - analyze and visualize the data: networkX, maps, Gephi
 - add country namecodes for easier combinating with other data
 
 ## ACTUAL VERSION
-[CHANGELOG.md](CHANGELOG.md)
+See the [whole history](CHANGELOG.md).
 
-### Version 0.2 - [2015-10-29](https://github.com/OKFNat/aidScraper/commit/bfd7517f650090ce6d460f10c23a3f5d4fa4207a)
+### Version 0.3 - 2016-04-19
 **extended scraper**
-- complete re-structuring of functionality
-- add csv export
-- add json export
-- add README.md
-- add documentation and comments
-- add LICENSE file
+- aid-scraper.py: fixed the csv output bug caused by cariage return characters.
+- update the README.md: add description of scraper.
 
 
 

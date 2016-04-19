@@ -18,7 +18,7 @@ import time
 __author__ = "Christian Goebel, Stefan Kasberger"
 __copyright__ = "Copyright 2015"
 __license__ = "MIT"
-__version__ = "0.2"
+__version__ = "0.3"
 __maintainer__ = "Stefan Kasberger"
 __email__ = "mail@stefankasberger.at"
 __status__ = "Production" # 'Development', 'Production' or 'Prototype'
@@ -52,10 +52,10 @@ def FetchHtml(url):
 	"""Fetches html url via urllib2.
 	
 	Args:
-		url: url to fetch
+		url: url to fetch (string).
 	
 	Returns:
-		html: html string as unicode
+		html: html string as unicode.
 	"""
 	response = urllib2.urlopen(url)
 	html = response.read().decode('utf-8')
@@ -70,9 +70,6 @@ def FetchHtmlTables(url, folder, pageCounter = 0):
 		url: string to fetch.
 		folder: directory to save the html files in.
 		pageCounter: counter for the actual number of the page (int).
-	
-	Returns:
-		none
 	"""
 	# the url has a page-counter at the end, so just increase the counter and fetch one page after another
 	rawHtml = FetchHtml(url+str(pageCounter))
@@ -80,7 +77,6 @@ def FetchHtmlTables(url, folder, pageCounter = 0):
 	if not os.path.exists(folder+TS):
 		os.makedirs(folder+TS)
 	Save2File(rawHtml, folder+TS+'/'+TS+'_table-'+str(pageCounter)+'.html')
-
 	# checks if there is a "weiter" (more) anchor, cause this means a next page exists
 	isWeiter = re.findall(r'<a href="(.*)" >weiter &gt;</a></div></div>', rawHtml)
 	if isWeiter:
@@ -112,9 +108,6 @@ def Save2File(data, filename):
 	Args:
 		data: string to save.
 		filename: name of the file with path.
-	
-	Returns:
-		none
 	"""
 	text_file = open(filename, "w")
 	text_file.write(data.encode('utf-8'))
@@ -200,19 +193,23 @@ def ParseTables(html):
 			'url': url of the project page.
 	"""
 	aidData = []
+	counter = 1
+
 	for page in html:
 		soup = BeautifulSoup(page)
 		table = soup.find_all('table')[1]
 		for row in table.find_all('tr')[1:]:
 			project = {}
 			tds = row.find_all('td')
+			project['unique-id'] = str(counter)
 			project['contract-title'] = tds[1].div.text
-			project['url'] = tds[1].div.a['href']
+			project['url'] =tds[1].div.a['href']
 			project['country-region'] = tds[2].div.text
 			project['OEZA-ADA-contract-volume'] = tds[3].div.text
 			project['contract-partner'] = tds[4].div.text
 			project['contract-number'] = tds[0].div.text
 			aidData.append(project)
+			counter += 1
 	
 	return aidData
 
@@ -225,6 +222,7 @@ def ParseProjects(aidData, htmlProjects):
 	
 	Returns:
 		aidData: list[] of dict{} of aid projects.
+			'unique-id': unique id for each project.
 			'contract-number': contract number.
 			'contract-title': title of the project.
 			'country-region': country and/or region, where the project takes place.
@@ -245,38 +243,31 @@ def SaveAidData(aidData, filename):
 	Args:
 		aidData: list[] of dict{} of aid projects.
 		filename: filepath of the JSON file. 
-	
-	Returns:
-		none
 	"""
 	Save2File(json.dumps(aidData, indent=2, ensure_ascii=False), filename)
+	print 'Aid data exported as JSON:',filename
 
 def OpenAidData(filename):
 	"""Opens the aid data JSON file.
 	
 	Args:
 		filename: filepath of the JSON file.
-	
-	Returns:
-		none
 	"""
 	aidData = json.loads(ReadFile(filename))
 	
 	return aidData
 
 def Save2CSV(data, filename):
-    """Exports the aid data into a csv file.
-    
-    Args:
-        data: list[] of dict{} of aid projects.
-        filename: filepath.
-    
-    Returns:
-        none
-    """
-    csvString = '"contract-number";"contract-title";"OEZA-ADA-contract-volume";"contract-partner";"country-region";"description";"url;"\n'
-    # iterate over each project
-    for project in data:
+	"""Exports the aid data into a csv file.
+	
+	Args:
+		data: list[] of dict{} of aid projects.
+		filename: filepath.
+	"""
+	csvString = '"unique-id","contract-number","contract-title","OEZA-ADA-contract-volume","contract-partner","country-region","description","url"\n'
+	# iterate over each project
+	for project in data:
+		uniqueId = '""'
 		number = '""'
 		title = '""'
 		funding = '""'
@@ -286,7 +277,9 @@ def Save2CSV(data, filename):
 		url = '""'
 		# read out each attribute
 		for elem in project.keys():
-			val = project[elem].replace('"', '')
+			val = project[elem].replace('"', '').replace('\n', '').replace('\r', '') # replace apostrophes.
+			if elem == 'unique-id':
+				uniqueId = '"'+val+'"'
 			if elem == 'contract-number':
 				number = '"'+val+'"'
 			if elem == 'contract-title':
@@ -298,18 +291,20 @@ def Save2CSV(data, filename):
 			if elem == 'country-region':
 				region = '"'+val+'"'
 			if elem == 'description':
-				description = '"'+val+'"'
+				description = '"'+val.strip('\n\r')+'"'
 			if elem == 'url':
-				url = '"'+val+'";'
+				url = '"'+val+'",'
 			
-		csvString += number+';'+title+';'+funding+';'+partner+';'+region+';'+description+';'+url+'\n'
+		csvString += uniqueId+','+number+','+title+','+funding+','+partner+','+region+','+description+','+url+'\n'
 
-    Save2File(csvString, filename)
+	Save2File(csvString, filename)
+	print 'Aid data exported as CSV:',filename
 
 if __name__ == "__main__":
 
 	# setup
-	print 'start:',TS
+	startTime = datetime.now()
+	print 'start:', startTime
 	aidData = []
 	SetupEnvironment()
 	DOWNLOAD_FILES = False
@@ -324,7 +319,8 @@ if __name__ == "__main__":
 		FetchHtmlProjects(aidData, FOLDER_RAW_HTML)
 	
 	if PARSE_FILES:
-		aidData = OpenAidData(FOLDER_JSON+'aid-data_'+TS+'.json')
+		htmlTables = ReadTableFilesInFolder(FOLDER_RAW_HTML+TS) # html as string
+		aidData = ParseTables(htmlTables)
 		htmlProjects = ReadProjectFilesInFolder(aidData, FOLDER_RAW_HTML+TS) # html as string
 		aidData = ParseProjects(aidData, htmlProjects)
 		SaveAidData(aidData, FOLDER_JSON+'aid-data_'+TS+'.json')
@@ -332,5 +328,5 @@ if __name__ == "__main__":
 	if STRUCTURE_DATA:
 		aidData = OpenAidData(FOLDER_JSON+'aid-data_'+TS+'.json')
 		Save2CSV(aidData, FOLDER_CSV+'aid-data_'+TS+'.csv')
-    
-	print 'runtime:', (datetime.now() - datetime.strptime(TS, '%Y-%m-%d-%H-%M'))
+	
+	print 'runtime:', (datetime.now() - startTime)
