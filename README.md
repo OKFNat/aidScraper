@@ -32,9 +32,15 @@ python aid-scraper.py
 
 **Original sourcecode**
 
-Thanks to Christian Goebel for the [original sourcecode](https://github.com/ChristianGoebel/Scrape_ADC) we used for the final version.
+Thanks to Christian Goebel for the [original sourcecode](https://github.com/ChristianGoebel/Scrape_ADC), which got used for the final version.
 
 ### How the scraper works
+**Configure the Scraper**
+
+There are two global variables in [aid-scraper.py](code/aid-scraper.py) you may want to change to your needs.
+- DELAY_TIME: To not overload the server or may get blocked because of too many request, you should set the delay time to fetch to 1-5 seconds, not less.
+- TS: The timestamp as a string can be set to the last download. So you can use downloaded data over and over again and must not do it everytime. When you do it first time, you can set the value to ```datetime.now().strftime('%Y-%m-%d-%H-%M')```, so it is the timestamp when the scraper starts.
+
 **Download the raw html data**
 
 Here all the html raw data gets downloaded, stored locally and the basic data gets parsed.
