@@ -32,7 +32,7 @@ FOLDER_JSON = ROOT_FOLDER + '/data/json/'
 FILENAME_BASE = 'aid-data'
 BASE_URL = 'http://www.entwicklung.at/nc/zahlen-daten-und-fakten/projektliste/'
 QUERY_URL = BASE_URL + '?tx_sysfirecdlist_pi1[test]=test&tx_sysfirecdlist_pi1[mode]=1&tx_sysfirecdlist_pi1[sort]=uid%3A1&tx_sysfirecdlist_pi1[pointer]='
-DELAY_TIME = 5 # in seconds
+DELAY_TIME = 2 # in seconds
 # TS = datetime.now().strftime('%Y-%m-%d-%H-%M')
 TS = '2016-04-03-03-05'
 
@@ -311,24 +311,24 @@ if __name__ == "__main__":
 	SetupEnvironment()
 	DOWNLOAD_FILES = False
 	PARSE_FILES = False
-	STRUCTURE_DATA = False
+	EXPORT_DATA = False
 
 	if DOWNLOAD_FILES:
-		FetchHtmlTables(QUERY_URL, FOLDER_RAW_HTML) # html as string
-		htmlTables = ReadTableFilesInFolder(FOLDER_RAW_HTML+TS) # html as string
+		FetchHtmlTables(QUERY_URL, FOLDER_RAW_HTML)
+		htmlTables = ReadTableFilesInFolder(FOLDER_RAW_HTML+TS) 
 		aidData = ParseTables(htmlTables)
-		SaveAidData(aidData, FOLDER_JSON+'aid-data_'+TS+'.json')
+		SaveAidData(aidData, FOLDER_JSON+FILENAME_BASE+'_'+TS+'.json')
 		FetchHtmlProjects(aidData, FOLDER_RAW_HTML)
 	
 	if PARSE_FILES:
-		htmlTables = ReadTableFilesInFolder(FOLDER_RAW_HTML+TS) # html as string
+		htmlTables = ReadTableFilesInFolder(FOLDER_RAW_HTML+TS)
 		aidData = ParseTables(htmlTables)
-		htmlProjects = ReadProjectFilesInFolder(aidData, FOLDER_RAW_HTML+TS) # html as string
+		htmlProjects = ReadProjectFilesInFolder(aidData, FOLDER_RAW_HTML+TS)
 		aidData = ParseProjects(aidData, htmlProjects)
-		SaveAidData(aidData, FOLDER_JSON+'aid-data_'+TS+'.json')
+		SaveAidData(aidData, FOLDER_JSON+FILENAME_BASE+'_'+TS+'.json')
 
-	if STRUCTURE_DATA:
-		aidData = OpenAidData(FOLDER_JSON+'aid-data_'+TS+'.json')
-		Save2CSV(aidData, FOLDER_CSV+'aid-data_'+TS+'.csv')
+	if EXPORT_DATA:
+		aidData = OpenAidData(FOLDER_JSON+FILENAME_BASE+'_'+TS+'.json')
+		Save2CSV(aidData, FOLDER_CSV+FILENAME_BASE+'_'+TS+'.csv')
 	
 	print 'runtime:', (datetime.now() - startTime)

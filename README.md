@@ -1,25 +1,29 @@
-Austrian aid scraper
+Austrian Aid Scraper
 ==============================
 The scraper extracts information from the austrian development projects since 2010 from the austrian development agency website. The automatically extracted informations are stored in CSV and JSON files to make the further usage as easy as possible.
 
 This repository provides the code and documentation and [keeps track of bugs as well as feature requests](https://github.com/OKFNat/aidScraper/issues).
 
-- Team: [Gute Taten für gute Daten](http://okfn.at/gutedaten/) project (Open Knowledge Austria)
+- [Data Source](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/)
+- Team: [Gute Taten für gute Daten](http://okfn.at/gutedaten/) project of [Open Knowledge Austria](http://okfn.at/)
 - Status: Production
 - Documentation: English
-- Licenses: [MIT License](http://opensource.org/licenses/MIT) + [Creative Commons Attribution 4.0](http://creativecommons.org/licenses/by/4.0/)
+- Licenses: 
+	- Content: [Creative Commons Attribution 4.0](http://creativecommons.org/licenses/by/4.0/)
+	- Software: [MIT License](http://opensource.org/licenses/MIT)
 
 **Used software**
-The sourcecode is written in Python 2. It was created with use of [iPython](http://ipython.org/), [BeautifulSoup4](http://www.crummy.com/software/BeautifulSoup/) and [urllib2](https://docs.python.org/2/library/urllib2.html).
 
+The sourcecode is written in Python 2. It was created with use of [iPython](http://ipython.org/), [BeautifulSoup4](http://www.crummy.com/software/BeautifulSoup/) and [urllib2](https://docs.python.org/2/library/urllib2.html).
 
 ## SCRAPER
 
 **Description**
 
-The scraper fetches the html passed in as urls from a csv file and stores them locally. The html is then parsed with BeautifulSoup4. Every table between the requested start country and end country is parsed out row by row, cell by cell and stored into a JSON structure with importing countries -> exporting countries -> arms classes -> data. The data structure is then  used to create nodes and edges files as JSON and CSV. This can also be used to extract country specific data to understand imports and exports from a country's perspective.
+The scraper fetches the overview page html with the table, stores it locally and parses out the data with beautifulsoup4. Then the scraper downloads every aid project entry and parses out the description from it. At the end, the data is stored as JSON and CSV files for easy usage later on.
 
 **Run scraper**
+
 Go into the root folder of this repository and execute following commands in your terminal:
 ```
 cd code
@@ -37,7 +41,7 @@ There are two global variables in [aid-scraper.py](code/aid-scraper.py) you may 
 - DELAY_TIME: To not overload the server or may get blocked because of too many request, you should set the delay time to fetch to 1-5 seconds, not less.
 - TS: The timestamp as a string can be set to the last download. So you can use downloaded data over and over again and must not do it everytime. When you do it first time, you can set the value to ```datetime.now().strftime('%Y-%m-%d-%H-%M')```, so it is the timestamp when the scraper starts.
 
-**Download the raw html data**
+**Download raw html**
 
 Here all the html raw data gets downloaded, stored locally and the basic data gets parsed.
 - Download all overview pages with the tables (html). The navigation for the fetching runs through all overview pages by asking the existance of the "weiter" anchor and counting up an url variable.
@@ -46,7 +50,7 @@ Here all the html raw data gets downloaded, stored locally and the basic data ge
 - Store the parsed data as JSON file.
 - Download all project pages (html).
 
-**Parse the html**
+**Parse html**
 
 Here the description of the project gets added to the data.
 - Open the JSON data.
@@ -66,7 +70,6 @@ The original data is from the project list of the austrian development agency (A
 ### The Tables
 The tables are the basic data, where most of the data is parsed out. The data is published in the following structure (e. g. first project).
 
-
 | Vertragsnummer | Vertragstitel | Land/Region | OEZA/ADA-Vertragssumme | Vertragspartner |
 |----------------|---------------|-------------|------------------------|-----------------|
 | 2325-02/2016 | Programm zum Schutz der MenschenrechtsverteidigerInnen in der westlichen Region Guatemalas | Guatemala | EUR 64.300,00 | HORIZONT3000 - Österreichische Organisation für Entwicklungszusammena |
@@ -82,7 +85,7 @@ The tables are the basic data, where most of the data is parsed out. The data is
 When you click on the contract titel in a table you get to the project page. It consists of the same data as the table view, except the additional description text (named "Beschreibung").
 
 ### Soundness
-So far, we can not say anything about the data quality (completeness, accurateness, etc.), but there are also so far no reaseons to doubt the quality.
+So far, we can not say anything about the data quality (completeness, accuracy, etc.), but there are also so far no reasons to doubt the quality.
 
 **Data errors found**
 - [Land/Region missing](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/?tx_sysfirecdlist_pi1[showUid]=486&cHash=bcfc60e39b1543897f5492737913c8f0) 
@@ -161,29 +164,26 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 Visit [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT) to learn more about the MIT License.
 
+## SOURCES
+
+[Original Data](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/)
+
+**Lobbying**
+
+**Documentation**
+
+**Other datasources**
+
+**Media coverage**
+
 ## REPOSITORY
 - [README.md](README.md): Overview of repository
-- [code/aid-scraper.py](code/aid-scraper.py): scraper script in python
-- [CHANGELOG.md](README.md): Overview of repository
-- [LICENSE](README.md): MIT license text
+- [code/aid-scraper.py](code/aid-scraper.py): scraper
+- [CHANGELOG.md](CHANGELOG.md)
+- [LICENSE](LICENSE)
 
-## TODO
-**important**
-- verify the data
-- research: is there a difference between approved funding and paid one?
-- convert code to Python3: pay attention to encoding issues in i/o operations
-
-**optional**
-- create dataset for network analyses: json, csv for gephi and networkX
-- compare data from tables with data from project pages.
-- solve the encoding and CR issues. When saving the html table cells to the dict, it is done as unicode, so i did not work out how to replace the '\n' and '\r' characters. Did it then before storing to the CSV file, which is a quick and dirty solution. 
-
-**new features**
-- analyze and visualize the data: networkX, maps, Gephi
-- add country namecodes for easier combinating with other data
-
-## ACTUAL VERSION
-See the [whole history](CHANGELOG.md).
+## CHANGELOG
+See the [whole history](CHANGELOG.md). Next the actual version.
 
 ### Version 0.3 - 2016-04-19
 **extended scraper**
