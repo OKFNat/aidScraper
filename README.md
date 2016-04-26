@@ -2,20 +2,16 @@ Austrian aid scraper
 ==============================
 The scraper extracts information from the austrian development projects since 2010 from the austrian development agency website. The automatically extracted informations are stored in CSV and JSON files to make the further usage as easy as possible.
 
-- Team: Gute Taten für gute Daten Project (Open Knowledge Austria)
+This repository provides the code and documentation and [keeps track of bugs as well as feature requests](https://github.com/OKFNat/aidScraper/issues).
+
+- Team: [Gute Taten für gute Daten](http://okfn.at/gutedaten/) project (Open Knowledge Austria)
 - Status: Production
 - Documentation: English
-- License: [MIT License](http://opensource.org/licenses/MIT)
-- Website: [Gute Taten für gute Daten project](http://okfn.at/gutedaten/) 
+- Licenses: [MIT License](http://opensource.org/licenses/MIT) + [Creative Commons Attribution 4.0](http://creativecommons.org/licenses/by/4.0/)
 
 **Used software**
 The sourcecode is written in Python 2. It was created with use of [iPython](http://ipython.org/), [BeautifulSoup4](http://www.crummy.com/software/BeautifulSoup/) and [urllib2](https://docs.python.org/2/library/urllib2.html).
 
-**Copyright**
-
-All content is openly licensed under the [Creative Commons Attribution 4.0](http://creativecommons.org/licenses/by/4.0/) license, unless otherwisely stated.
-
-All sourcecode is openly licensed under the [MIT license](http://opensource.org/licenses/MIT), unless otherwisely stated.
 
 ## SCRAPER
 
@@ -133,7 +129,39 @@ columns (see attribute description above):
 
 row: one project each row.
 
-## STRUCTURE
+## CONTRIBUTION
+In the spirit of free software, everyone is encouraged to help improve this project.
+
+Here are some ways you can contribute:
+
+- by reporting bugs
+- by suggesting new features
+- by translating to a new language
+- by writing or editing documentation
+- by analyzing the data
+- by visualizing the data
+- by writing code (**no pull request is too small**: fix typos in the user interface, add code comments, clean up inconsistent whitespace)
+- by refactoring code
+- by closing issues
+- by reviewing pull requests
+- by enriching the data with other data sources
+
+When you are ready, submit a [pull request](https://github.com/OKFNat/aidScraper/pulls).
+
+### Submitting an Issue
+
+We use the [GitHub issue tracker](https://github.com/OKFNat/aidScraper/issues) to track bugs and features. Before submitting a bug report or feature request, check to make sure it hasn't already been submitted. When submitting a bug report, please try to provide a screenshot that demonstrates the problem. 
+
+## COPYRIGHT
+All content is openly licensed under the [Creative Commons Attribution 4.0](http://creativecommons.org/licenses/by/4.0/) license, unless otherwisely stated.
+
+All sourcecode is free software: you can redistribute it and/or modify it under the terms of the MIT License.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Visit [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT) to learn more about the MIT License.
+
+## REPOSITORY
 - [README.md](README.md): Overview of repository
 - [code/aid-scraper.py](code/aid-scraper.py): scraper script in python
 - [CHANGELOG.md](README.md): Overview of repository

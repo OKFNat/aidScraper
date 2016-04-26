@@ -258,13 +258,14 @@ def OpenAidData(filename):
 	return aidData
 
 def Save2CSV(data, filename):
-	"""Exports the aid data into a csv file.
+	"""Exports the aid data into a structured csv file.
 	
 	Args:
 		data: list[] of dict{} of aid projects.
 		filename: filepath.
 	"""
 	csvString = '"unique-id","contract-number","contract-title","OEZA-ADA-contract-volume","contract-partner","country-region","description","url"\n'
+
 	# iterate over each project
 	for project in data:
 		uniqueId = '""'
@@ -275,6 +276,7 @@ def Save2CSV(data, filename):
 		region = '""'
 		description = '""'
 		url = '""'
+		
 		# read out each attribute
 		for elem in project.keys():
 			val = project[elem].replace('"', '').replace('\n', '').replace('\r', '') # replace apostrophes.
@@ -309,7 +311,7 @@ if __name__ == "__main__":
 	SetupEnvironment()
 	DOWNLOAD_FILES = False
 	PARSE_FILES = False
-	STRUCTURE_DATA = True
+	STRUCTURE_DATA = False
 
 	if DOWNLOAD_FILES:
 		FetchHtmlTables(QUERY_URL, FOLDER_RAW_HTML) # html as string
