@@ -168,13 +168,17 @@ Visit [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT) t
 
 [Original Data](http://www.entwicklung.at/zahlen-daten-und-fakten/projektliste/)
 
-**Lobbying**
+**Aid**
+- [Dreijahresprogramm der österreichischen Entwicklungspolitik 2016 bis 2018](http://www.entwicklung.at/uploads/media/3JP_2016-2018_03.pdf)
 
 **Documentation**
-
-**Other datasources**
-
-**Media coverage**
+- [Österreichische Entwicklungs Zusammenarbeit](http://www.entwicklung.at)
+- [Entwicklungszusammenarbeitsgesetz inklusive EZA-Gesetz-Novelle 2003](http://www.entwicklung.at/uploads/media/EZA_Gesetz_03.pdf)
+- [ODA Bericht 2014](http://www.entwicklung.at/uploads/media/ODA_Bericht2014.pdf)
+- [ODA Bericht 2013](http://www.entwicklung.at/uploads/media/ODA-Bericht_2013_03.pdf)
+- [ODA Bericht 2012](http://www.entwicklung.at/uploads/media/ODA-Bericht_2012_01.pdf)
+- [ODA Bericht 2011](http://www.entwicklung.at/uploads/media/ODA-Bericht_2011.pdf)
+- [ODA Bericht 2010](http://www.entwicklung.at/uploads/media/ODA-Bericht_2010_03.pdf)
 
 ## REPOSITORY
 - [README.md](README.md): Overview of repository
